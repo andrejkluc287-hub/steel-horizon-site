@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Steel Horizon: The Ghosts of East - Официальный сайт</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0b0c10;
+    color: #c5c6c7;
+    transition: background 0.5s, color 0.5s;
+  }
+  body.light {
+    background: #f5f5f5;
+    color: #222;
+  }
+  a {
+    color: #45ffe8;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Container */
+  #container {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  #sidebar {
+    width: 250px;
+    background: #1f2833;
+    box-shadow: inset -2px 0 5px rgba(69,255,232,0.5);
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    user-select: none;
+  }
+  #sidebar.light {
+    background: #e0e0e0;
+    box-shadow: inset -2px 0 5px rgba(0, 255, 255, 0.7);
+  }
+  #sidebar nav {
+    flex-grow: 1;
+  }
+  #sidebar nav button {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #45ffe8;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 15px 20px;
+    text-align: left;
+    cursor: pointer;
+    border-left: 5px solid transparent;
+    transition:
+      background 0.3s,
+      border-color 0.4s ease-in-out,
+      box-shadow 0.4s ease-in-out;
+  }
+  #sidebar.light nav button {
+    color: #007777;
+  }
+  #sidebar nav button:hover,
+  #sidebar nav button.active {
+    background: #45ffe8;
+    color: #0b0c10;
+    border-left-color: #00fff7;
+    box-shadow: 0 0 8px #00fff7;
+  }
+  #sidebar.light nav button:hover,
+  #sidebar.light nav button.active {
+    background: #00ccc6;
+    color: #0b0c10;
+    border-left-color: #006666;
+    box-shadow: 0 0 10px #00ccc6;
+  }
+
+  /* Theme toggle */
+  #themeToggle {
+    margin: 10px 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #45ffe8;
+    color: #0b0c10;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s;
+  }
+  #themeToggle:hover {
+    background: #00fff7;
+  }
+
+  /* Main content */
+  #mainContent {
+    flex-grow: 1;
+    padding: 25px 40px;
+    overflow-y: auto;
+    position: relative;
+    background: #0b0c10;
+    transition: background 0.5s, color 0.5s;
+  }
+  #mainContent.light {
+    background: #fafafa;
+    color: #222;
+  }
+  #mainContent h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #45ffe8;
+    padding-bottom: 10px;
+  }
+
+  /* Search bar */
+  #searchBar {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 25px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #1f2833;
+    color: #c5c6c7;
+    transition: background 0.4s, color 0.4s;
+  }
+  #searchBar.light {
+    background: #ddd;
+    color: #222;
+  }
+
+  /* Fade animation for sections */
+  .content {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    height: 0;
+    overflow: hidden;
+  }
+  .content.active {
+    opacity: 1;
+    height: auto;
+  }
+
+  /* --- Персонажи --- */
+  .categories {
+    margin-bottom: 20px;
+  }
+  .cat-btn {
+    background: transparent;
+    border: 2px solid #45ffe8;
+    color: #45ffe8;
+    padding: 8px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .cat-btn.active, .cat-btn:hover {
+    background: #45ffe8;
+    color: #0b0c10;
+  }
+  .cat-content {
+    display: none;
+  }
+  .cat-content.active {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .character-card {
+    background: #1f2833;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    box-shadow: 0 0 15px #45ffe8;
+    cursor: default;
+    transition: box-shadow 0.3s ease;
+    color: #c5c6c7;
+  }
+  .character-card:hover {
+    box-shadow: 0 0 25px #00fff7;
+  }
+  .character-card img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+  }
+  .character-card:hover img {
+    transform: scale(1.05);
+  }
+
+  /* --- Новости --- */
+  .news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .news-card {
+    background: #1f2833;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #45ffe8;
+    color: #c5c6c7;
+  }
+  .news-card h3 {
+    margin-top: 0;
+  }
+  .news-card time {
+    font-size: 0.9rem;
+    color: #8ac6d1;
+  }
+  .news-card p {
+    margin-bottom: 10px;
+  }
+  .read-more {
+    background: #45ffe8;
+    border: none;
+    color: #0b0c10;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background 0.3s;
+  }
+  .read-more:hover {
+    background: #00fff7;
+  }
+  /* Модальное окно новости */
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(11,12,16,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  .modal[aria-hidden="false"] {
+    display: flex;
+  }
+  .modal-content {
+    background: #0b0c10;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    color: #66fcf1;
+    box-shadow: 0 0 20px #45ffe8;
+    outline: none;
+  }
+  #modalClose {
+    margin-top: 20px;
+    background: #45ffe8;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #0b0c10;
+    transition: background 0.3s;
+  }
+  #modalClose:hover {
+    background: #00fff7;
+  }
+
+  /* --- Календарь --- */
+  .calendar {
+    width: 100%;
+    border-collapse: collapse;
+    color: #c5c6c7;
+  }
+  .calendar th, .calendar td {
+    border: 1px solid #45ffe8;
+    padding: 8px 12px;
+  }
+  .calendar th {
+    background: #0b0c10;
+  }
+  .event-btn {
+    background: transparent;
+    border: none;
+    color: #45ffe8;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+  .event-btn:hover {
+    background: #45ffe8;
+    color: #0b0c10;
+  }
+
+  /* --- FAQ аккордеон --- */
+  .faq-item {
+    background: #1f2833;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #45ffe8;
+  }
+  .faq-question {
+    padding: 15px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+  }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 20px;
+    color: #c5c6c7;
+  }
+  .faq-item.open .faq-answer {
+    max-height: 200px;
+    padding: 15px 20px;
+  }
+
+  /* --- Всплывающие подсказки --- */
+  [data-tooltip] {
+    position: relative;
+    cursor: help;
+  }
+  [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #45ffe8;
+    color: #0b0c10;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    z-index: 10;
+  }
+  
+  /* --- Футер --- */
+  footer {
+    background: #1f2833;
+    color: #45ffe8;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    user-select: none;
+  }
+  footer a {
+    margin: 0 10px;
+    color: #45ffe8;
+    font-weight: 600;
+  }
+  footer a:hover {
+    color: #00fff7;
+  }
+
+  /* --- Адаптив --- */
+  @media (max-width: 900px) {
+    #container {
+      flex-direction: column;
+    }
+    #sidebar {
+      width: 100%;
+      display: flex;
+      overflow-x: auto;
+      box-shadow: inset 0 -2px 5px rgba(69,255,232,0.5);
+    }
+    #sidebar nav {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+    #sidebar nav button {
+      flex: 1 0 auto;
+      text-align: center;
+      border-left: none;
+      border-bottom: 5px solid transparent;
+    }
+    #sidebar nav button.active, #sidebar nav button:hover {
+      border-left: none;
+      border-bottom-color: #00fff7;
+      box-shadow: none;
+    }
+    #mainContent {
+      padding: 15px 20px;
+    }
+    .cat-content {
+      flex-direction: column;
+    }
+    .character-card {
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="container">
+
+  <aside id="sidebar" aria-label="Навигация">
+    <button id="themeToggle" aria-pressed="false" aria-label="Переключить тему: тёмная/светлая">Светлая тема</button>
+    <nav role="navigation" aria-label="Основные разделы сайта">
+      <button class="active" data-target="characters" aria-current="page">Персонажи</button>
+      <button data-target="news">Новости</button>
+      <button data-target="calendar">Календарь</button>
+      <button data-target="faq">FAQ</button>
+      <button data-target="community">Комьюнити</button>
+      <button data-target="guides">Гайды</button>
+    </nav>
+  </aside>
+
+  <main id="mainContent" tabindex="0" aria-live="polite">
+
+    <input
+      type="search"
+      id="searchBar"
+      placeholder="Поиск по разделам..."
+      aria-label="Поиск по разделам"
+      spellcheck="false"
+      autocomplete="off"
+    />
+
+    <!-- Персонажи -->
+    <section id="characters" class="content active" tabindex="0">
+      <h2>Персонажи</h2>
+      <div class="categories" role="tablist" aria-label="Категории персонажей">
+        <button class="cat-btn active" data-cat="commander" role="tab" aria-selected="true" aria-controls="commander">Командир</button>
+        <button class="cat-btn" data-cat="snipers" role="tab" aria-selected="false" aria-controls="snipers">Снайперы</button>
+        <button class="cat-btn" data-cat="scouts" role="tab" aria-selected="false" aria-controls="scouts">Разведчики</button>
+      </div>
+
+      <div class="cat-content active" id="commander" role="tabpanel">
+        <div class="character-card" data-tooltip="Опытный лидер, стратег и тактик.">
+          <img src="https://i.imgur.com/hIYn9xN.png" alt="Командир" />
+          <h3>Командир</h3>
+          <p>Опытный лидер с богатой боевой историей, мастер тактики.</p>
+          <p><strong>Навыки:</strong> Стратегия, мотивация, командование.</p>
+          <p><strong>Снаряжение:</strong> Пистолет, рация, бронежилет.</p>
+        </div>
+      </div>
+
+      <div class="cat-content" id="snipers" role="tabpanel" aria-hidden="true">
+        <div class="character-card" data-tooltip="Меткий стрелок с высоким уровнем терпения.">
+          <img src="https://i.imgur.com/uTbWe7D.png" alt="Снайпер Алексей" />
+          <h3>Снайпер Алексей</h3>
+          <p>Меткий стрелок с невероятным терпением и зрением.</p>
+          <p><strong>Навыки:</strong> Маскировка, дальний выстрел.</p>
+          <p><strong>Снаряжение:</strong> Винтовка, камуфляж, нож.</p>
+        </div>
+      </div>
+
+      <div class="cat-content" id="scouts" role="tabpanel" aria-hidden="true">
+        <div class="character-card" data-tooltip="Эксперт по скрытному проникновению и наблюдению.">
+          <img src="https://i.imgur.com/YE7VPdy.png" alt="Разведчик Марина" />
+          <h3>Разведчик Марина</h3>
+          <p>Эксперт по скрытному проникновению и наблюдению.</p>
+          <p><strong>Навыки:</strong> Скрытность, ориентирование.</p>
+          <p><strong>Снаряжение:</strong> Дрон, рация, пистолет.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Новости -->
+    <section id="news" class="content" tabindex="0" aria-hidden="true">
+      <h2>Новости</h2>
+      <div class="news-list" role="list">
+        <article class="news-card" role="listitem" tabindex="0" data-fulltext="Вышло новое обновление с добавлением дрона-разведчика и расширением карты кампании. Подробности внутри.">
+          <h3>Обновление 1.2 – новый дрон и карта</h3>
+          <time datetime="2025-08-15">15 Августа 2025</time>
+          <p>Вышло новое обновление с добавлением дрона-разведчика и расширением карты...</p>
+          <button class="read-more">Читать далее</button>
+        </article>
+        <article class="news-card" role="listitem" tabindex="0" data-fulltext="Кампания Steel Horizon официально запущена, добро пожаловать в игру!">
+          <h3>Запуск кампании</h3>
+          <time datetime="2025-07-30">30 Июля 2025</time>
+          <p>Кампания Steel Horizon официально запущена, добро пожаловать в игру!</p>
+          <button class="read-more">Читать далее</button>
+        </article>
+      </div>
+
+      <!-- Модальное окно новости -->
+      <div id="newsModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+        <div class="modal-content">
+          <h3 id="modalTitle"></h3>
+          <p id="modalBody"></p>
+          <button id="modalClose">Закрыть</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Календарь -->
+    <section id="calendar" class="content" tabindex="0" aria-hidden="true">
+      <h2>Календарь событий</h2>
+      <table class="calendar" role="grid" aria-label="Календарь событий">
+        <thead>
+          <tr><th scope="col">Дата</th><th scope="col">Событие</th></tr>
+        </thead>
+        <tbody>
+          <tr data-details="Старт ивента с уникальными наградами.">
+            <td>20 Августа 2025</td>
+            <td><button class="event-btn">Летняя операция</button></td>
+          </tr>
+          <tr data-details="Трансляция с разработчиками, вопросы и ответы.">
+            <td>5 Сентября 2025</td>
+            <td><button class="event-btn">Стрим с разработчиками</button></td>
+          </tr>
+          <tr data-details="Выпуск второй главы кампании.">
+            <td>10 Октября 2025</td>
+            <td><button class="event-btn">Выпуск главы 2</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="eventDetails" aria-live="polite" style="margin-top:15px; padding:10px; background:#1f2833; border-radius:8px; color:#66fcf1; min-height:50px;">
+        Кликните по событию, чтобы узнать детали.
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="content" tabindex="0" aria-hidden="true">
+      <h2>FAQ</h2>
+      <div class="faq-item">
+        <div class="faq-question" tabindex="0" role="button" aria-expanded="false">Как начать играть в Steel Horizon?</div>
+        <div class="faq-answer" aria-hidden="true">
+          Просто скачайте игру из Roblox и начните кампанию с первой главы. Исследуйте карту и выполняйте миссии.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" tabindex="0" role="button" aria-expanded="false">Какие персонажи доступны?</div>
+        <div class="faq-answer" aria-hidden="true">
+          В игре есть командир, снайперы и разведчики с уникальными навыками и снаряжением.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" tabindex="0" role="button" aria-expanded="false">Где найти новости и обновления?</div>
+        <div class="faq-answer" aria-hidden="true">
+          Все новости доступны в соответствующем разделе сайта.
+        </div>
+      </div>
+    </section>
+
+    <!-- Комьюнити -->
+    <section id="community" class="content" tabindex="0" aria-hidden="true">
+      <h2>Комьюнити и соцсети</h2>
+      <p>Присоединяйтесь к нам в Telegram и Discord, чтобы быть в курсе всех новостей и общаться с другими игроками.</p>
+      <p><a href="https://t.me/Steel_Horizon_The_Ghosts_of_Eas" target="_blank" rel="noopener noreferrer">Наш Telegram</a></p>
+      <p><a href="https://discord.gg/63WgjWYM" target="_blank" rel="noopener noreferrer">Наш Discord</a></p>
+      <p>Для технической поддержки используйте <a href="https://t.me/steelhorizonsupport_bot" target="_blank" rel="noopener noreferrer">наш техподдержка-бот</a>.</p>
+      <p>Почта: <a href="mailto:steelhorizoninfo@gmail.com">steelhorizoninfo@gmail.com</a></p>
+    </section>
+
+    <!-- Гайды -->
+    <section id="guides" class="content" tabindex="0" aria-hidden="true">
+      <h2>Гайды и обучение</h2>
+      <p>Здесь будут размещены подробные гайды по механикам игры, тактикам, использованию дронов и сканеров, а также обучение новым игрокам.</p>
+      <p>В будущем — видеоуроки и интерактивные туториалы.</p>
+    </section>
+
+  </main>
+
+</div>
+
+<footer>
+  Steel Horizon &copy; 2025 — Все права защищены | 
+  <a href="mailto:steelhorizoninfo@gmail.com">Email</a> | 
+  <a href="https://t.me/Steel_Horizon_The_Ghosts_of_Eas" target="_blank" rel="noopener noreferrer">Telegram</a> | 
+  <a href="https://discord.gg/63WgjWYM" target="_blank" rel="noopener noreferrer">Discord</a> | 
+  <a href="https://t.me/steelhorizonsupport_bot" target="_blank" rel="noopener noreferrer">Техподдержка</a>
+</footer>
+
+<script>
+  // --- Навигация и переключение разделов с анимацией fade ---
+  const navButtons = document.querySelectorAll('#sidebar nav button');
+  const sections = document.querySelectorAll('#mainContent .content');
+  const searchBar = document.getElementById('searchBar');
+
+  function activateSection(targetId) {
+    sections.forEach(section => {
+      if(section.id === targetId) {
+        section.classList.add('active');
+        section.setAttribute('aria-hidden', 'false');
+        section.focus();
+      } else {
+        section.classList.remove('active');
+        section.setAttribute('aria-hidden', 'true');
+      }
+    });
+    navButtons.forEach(btn => {
+      if(btn.dataset.target === targetId) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-current', 'page');
+      } else {
+        btn.classList.remove('active');
+        btn.removeAttribute('aria-current');
+      }
+    });
+    searchBar.value = ''; // Очистка поиска при смене раздела
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activateSection(btn.dataset.target);
+    });
+  });
+
+  // По умолчанию активен первый раздел (Персонажи)
+  activateSection('characters');
+
+  // --- Персонажи: переключение категорий ---
+  const catButtons = document.querySelectorAll(".cat-btn");
+  const catContents = document.querySelectorAll(".cat-content");
+
+  catButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      catButtons.forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add("active");
+      btn.setAttribute('aria-selected', 'true');
+
+      const target = btn.dataset.cat;
+      catContents.forEach(c => {
+        if(c.id === target) {
+          c.classList.add("active");
+          c.setAttribute('aria-hidden', 'false');
+        } else {
+          c.classList.remove("active");
+          c.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+  });
+
+  // --- Новости: модальное окно ---
+  const readMoreButtons = document.querySelectorAll(".read-more");
+  const modal = document.getElementById("newsModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  const modalClose = document.getElementById("modalClose");
+
+  readMoreButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const article = button.closest(".news-card");
+      modalTitle.textContent = article.querySelector("h3").textContent;
+      modalBody.textContent = article.dataset.fulltext;
+      modal.setAttribute("aria-hidden", "false");
+      modal.focus();
+    });
+  });
+
+  modalClose.addEventListener("click", () => {
+    modal.setAttribute("aria-hidden", "true");
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
+      modal.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  // --- Календарь: показ деталей события ---
+  const eventButtons = document.querySelectorAll(".event-btn");
+  const eventDetails = document.getElementById("eventDetails");
+
+  eventButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const row = btn.closest("tr");
+      const details = row.dataset.details;
+      eventDetails.textContent = details;
+    });
+  });
+
+  // --- FAQ: аккордеон ---
+  const faqItems = document.querySelectorAll(".faq-item");
+  faqItems.forEach(item => {
+    const question = item.querySelector(".faq-question");
+    question.addEventListener("click", () => {
+      const isOpen = item.classList.toggle("open");
+      question.setAttribute("aria-expanded", isOpen);
+      const answer = item.querySelector(".faq-answer");
+      answer.setAttribute("aria-hidden", !isOpen);
+    });
+    question.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        question.click();
+      }
+    });
+  });
+
+  // --- Поиск по разделам ---
+  searchBar.addEventListener("input", () => {
+    const query = searchBar.value.trim().toLowerCase();
+    if (!query) {
+      // Если пусто — показываем текущий раздел полностью
+      const activeSection = document.querySelector('#mainContent .content.active');
+      if (activeSection) activeSection.style.display = '';
+      return;
+    }
+
+    sections.forEach(section => {
+      const text = section.textContent.toLowerCase();
+      if(text.includes(query)) {
+        section.style.display = '';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+  });
+
+  // --- Тема: переключение светлая/тёмная ---
+  const themeToggle = document.getElementById("themeToggle");
+  const body = document.body;
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  const searchInput = document.getElementById('searchBar');
+
+  function setTheme(light) {
+    if(light) {
+      body.classList.add('light');
+      sidebar.classList.add('light');
+      mainContent.classList.add('light');
+      searchInput.classList.add('light');
+      themeToggle.textContent = 'Тёмная тема';
+      themeToggle.setAttribute('aria-pressed', 'true');
+    } else {
+      body.classList.remove('light');
+      sidebar.classList.remove('light');
+      mainContent.classList.remove('light');
+      searchInput.classList.remove('light');
+      themeToggle.textContent = 'Светлая тема';
+      themeToggle.setAttribute('aria-pressed', 'false');
+    }
+  }
+
+  // Загрузка из localStorage
+  let isLight = localStorage.getItem('theme') === 'light';
+  setTheme(isLight);
+
+  themeToggle.addEventListener('click', () => {
+    isLight = !isLight;
+    setTheme(isLight);
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+
+</script>
+</body>
+</html>
